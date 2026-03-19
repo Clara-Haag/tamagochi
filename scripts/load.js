@@ -1,3 +1,6 @@
+import Tamagochi from "./classes/tamagochi.js";
+import UI from "./classes/ui.js";
+
 function load() {
   // creating a new pet
   const pet = new Tamagochi("Zed");
@@ -5,8 +8,8 @@ function load() {
   const ui = new UI();
 
   // insert the initial data in the UI
-  updateUI();
+  ui.updateUI(pet);
   return console.log("Welcome Home!");
 }
 
-export { load };
+export default load;

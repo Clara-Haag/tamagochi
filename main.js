@@ -1,30 +1,38 @@
-// main vars and modules importing
-// TODO: const script_path = "";
-
-import { load } from "./scripts/load.js";
-
 // starting node.js web server
-const http = require("node:http");
-const fs = require("node:fs");
+import { createServer } from "node:http";
+import { createReadStream } from "node:fs";
+import { extname } from "node:path";
 
 const hostname = "127.0.0.1";
 const port = "3000";
 
-const server = http.createServer((req, res) => {
-  res.writeHead(200, "Content-Type", "text/html");
+const server = createServer((req, res) => {
+  let path = "." + req.url;
 
-  fs.readFile("./index.html", null, function (error, data) {
-    if (error) {
-      res.writeHead(404);
-      res.write("404 Not Found ◥(ฅº￦ºฅ)◤");
-    } else {
-      res.write(data);
-    }
-    res.end();
-  });
+  if (req.url === "/") {
+    path = "./index.html";
+  }
+
+  const ext = extname(path);
+  const contentType =
+    ext === ".js"
+      ? "application/javascript"
+      : ext === ".html"
+        ? "text/html"
+        : "text/plain";
+
+  res.statusCode = 200;
+  res.setHeader("Content-Type", contentType);
+
+  createReadStream(path)
+    .on("error", () => {
+      res.statusCode = 404;
+      res.setHeader("Content-Type", "text/html");
+      res.end("404 Not Found ◥(ฅº￦ºฅ)◤");
+    })
+    .pipe(res);
 });
 
 server.listen(port, hostname, () => {
-  load();
   console.log("Running at localhost:3000");
 });
