@@ -1,4 +1,5 @@
-import { createUIEvents } from "./ui_events.js";
+import { createUIEvents } from "./createUIEvents.js";
+import { updateSprite } from "./updateSprite.js";
 
 class UI {
   constructor() {
@@ -7,6 +8,7 @@ class UI {
     this.food = document.getElementById("food");
     this.fun = document.getElementById("fun");
     this.sleep = document.getElementById("sleep");
+    this.sprite = document.getElementById("sprite");
 
     // mapping actions
     this.feed = document.getElementById("feed");
@@ -20,6 +22,7 @@ class UI {
     this.food.innerText = tamagochi.food;
     this.fun.innerText = tamagochi.fun;
     this.sleep.innerText = tamagochi.sleep;
+    updateSprite(this, tamagochi);
 
     console.log("Updated sucessfuly!");
   }
